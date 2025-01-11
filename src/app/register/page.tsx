@@ -17,7 +17,7 @@ import { RegisterSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { login, register } from "@/actions/login";
+import { register } from "@/actions/login";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | undefined>("");
