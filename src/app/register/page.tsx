@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { LoginSchema } from "@/schemas";
+import { RegisterSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { login } from "@/actions/login";
+import { login, register } from "@/actions/login";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | undefined>("");
@@ -25,20 +25,21 @@ export default function LoginPage() {
 
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
+        name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(() => {
-      login(values).then(data => {
+      register(values).then(data => {
         setError(data.error);
         setSuccess(data.success);
       })
@@ -49,6 +50,23 @@ export default function LoginPage() {
     <div className="">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="Your name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -88,7 +106,7 @@ export default function LoginPage() {
           <FormSuccess message={success} />
           <div className="text-right">
             <Button type="submit" disabled={isPending}>
-              Login
+              Add user
             </Button>
           </div>
         </form>
@@ -96,3 +114,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
