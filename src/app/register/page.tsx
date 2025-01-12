@@ -17,7 +17,7 @@ import { RegisterSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { register } from "@/actions/login";
+import { register } from "@/actions/register";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | undefined>("");
@@ -28,7 +28,7 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-        name: "",
+      name: "",
       email: "",
       password: "",
     },
@@ -39,10 +39,10 @@ export default function LoginPage() {
     setSuccess("");
 
     startTransition(() => {
-      register(values).then(data => {
+      register(values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
-      })
+      });
     });
   };
 
@@ -114,4 +114,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
